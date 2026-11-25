@@ -1,0 +1,289 @@
+{
+  "info": {
+    "_postman_id": "a9b8c7d6-e5f4-3210-notes-api003",
+    "name": "Week 2 - Mini Project: Notes App Backend",
+    "description": "Postman Collection for Notes App Backend API with JWT Auth and CRUD operations on local MongoDB",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5003/api",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "noteId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5003/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5003",
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "Auth - Register",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) {",
+              "    pm.collectionVariables.set('authToken', res.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ansh Sharma\",\n  \"email\": \"ansh.notes@example.com\",\n  \"password\": \"SecretPass123!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.token) {",
+              "    pm.collectionVariables.set('authToken', res.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"ansh.notes@example.com\",\n  \"password\": \"SecretPass123!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Notes - Create Note",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const res = pm.response.json();",
+              "if (res.data && res.data._id) {",
+              "    pm.collectionVariables.set('noteId', res.data._id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Architecture Decisions for Week 2\",\n  \"content\": \"Using Node.js, Express, MongoDB with Mongoose, and JWT authentication for secure multi-tenant data storage.\",\n  \"tags\": [\"backend\", \"mongodb\", \"architecture\"],\n  \"isPinned\": true,\n  \"color\": \"#e0f2fe\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"]
+        }
+      }
+    },
+    {
+      "name": "Notes - Get All Notes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"]
+        }
+      }
+    },
+    {
+      "name": "Notes - Search Notes by Keyword",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes?search=Architecture",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [
+            {
+              "key": "search",
+              "value": "Architecture"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Notes - Filter by Tag",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes?tag=backend",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [
+            {
+              "key": "tag",
+              "value": "backend"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Notes - Get Single Note by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "{{noteId}}"]
+        }
+      }
+    },
+    {
+      "name": "Notes - Update Note",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Architecture Decisions for Week 2 (Updated)\",\n  \"content\": \"All CRUD endpoints verified against local MongoDB instance successfully.\",\n  \"isPinned\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "{{noteId}}"]
+        }
+      }
+    },
+    {
+      "name": "Notes - Get User Tags",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes/tags",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "tags"]
+        }
+      }
+    },
+    {
+      "name": "Notes - Delete Note",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notes/{{noteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes", "{{noteId}}"]
+        }
+      }
+    }
+  ]
+}

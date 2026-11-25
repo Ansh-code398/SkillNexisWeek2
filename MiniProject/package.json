@@ -1,0 +1,22 @@
+{
+  "name": "mini-project-notes-app-backend",
+  "version": "1.0.0",
+  "description": "Notes App Backend REST API with JWT Auth and local MongoDB",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "bun src/server.js",
+    "dev": "bun --watch src/server.js"
+  },
+  "keywords": ["bun", "es6", "express", "mongodb", "notes", "jwt", "bcrypt", "rest-api"],
+  "author": "Ansh Sharma",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.2"
+  }
+}
